@@ -15,6 +15,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.telephony.CellLocation;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -161,6 +164,44 @@ public class MainActivity extends PreferenceActivity implements SharedPreference
         prepareSimCardWhiteList();
     }
 
+    PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        public void onCallForwardingIndicatorChanged(boolean cfi) {}
+        public void onCallStateChanged(int state, String incomingNumber) {}
+        public void onCellLocationChanged(CellLocation location) {
+            System.out.println(location);
+        }
+        public void onDataActivity(int direction) {}
+        public void onDataConnectionStateChanged(int state) {}
+        public void onMessageWaitingIndicatorChanged(boolean mwi) {}
+        public void onServiceStateChanged(ServiceState serviceState) {
+            System.out.println(serviceState);
+        }
+
+
+        public void onSignalStrengthChanged(int asu) {}
+    };
+
+    private void registerAddCellListener() {
+        final TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        tMgr.getNeighboringCellInfo();
+        PreferenceScreen p = (PreferenceScreen) findPreference("cell.add");
+        tMgr.listen(phoneStateListener,
+                PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR |
+                        PhoneStateListener.LISTEN_CALL_STATE |
+                        PhoneStateListener.LISTEN_CELL_LOCATION |
+                        PhoneStateListener.LISTEN_DATA_ACTIVITY |
+                        PhoneStateListener.LISTEN_DATA_CONNECTION_STATE |
+                        PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR |
+                        PhoneStateListener.LISTEN_SERVICE_STATE |
+                        PhoneStateListener.LISTEN_SIGNAL_STRENGTH);
+        p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                return true;
+            }
+        });
+    }
+
     private void registerAddSimCardListener() {
         final TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         final String ssn = tMgr.getSimSerialNumber();
@@ -273,6 +314,7 @@ public class MainActivity extends PreferenceActivity implements SharedPreference
         loadPrefs();
         displayPrompt();
         registerAddSimCardListener();
+        registerAddCellListener();
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {

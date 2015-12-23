@@ -105,8 +105,8 @@
 
         <PreferenceScreen
             android:icon="@drawable/ic_simcard"
-            android:title="SIM Card settings"
-            android:summary="Activation only on configured SIM card">
+            android:summary="Activation only on configured SIM card"
+            android:title="SIM Card settings">
             <PreferenceCategory android:title="SIM Card activation">
                 <CheckBoxPreference
                     android:defaultValue="false"
@@ -121,11 +121,11 @@
                 <PreferenceScreen
                     android:icon="@drawable/ic_add"
                     android:key="add.current.simcard"
-                    android:title="Add current SIM card"></PreferenceScreen>
+                    android:title="Add current SIM card" />
                 <PreferenceScreen
                     android:icon="@drawable/ic_remove"
                     android:key="remove.simcard"
-                    android:title="Remove selected"></PreferenceScreen>
+                    android:title="Remove selected" />
             </PreferenceCategory>
         </PreferenceScreen>
         <CheckBoxPreference
@@ -140,6 +140,22 @@
             android:key="return.state"
             android:summary="@string/revert.state.summary"
             android:title="Initial state" />
+        <PreferenceScreen android:title="Activation on Cell Network">
+            <PreferenceCategory>
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="activate.cell"
+                    android:title="Activation on Cell Network" />
+            </PreferenceCategory>
+            <PreferenceCategory>
+                <PreferenceScreen
+                    android:key="cell.add"
+                    android:icon="@drawable/ic_add"
+                    android:title="Add cell" />
+                <PreferenceScreen
+                    android:title="Modify cells" />
+            </PreferenceCategory>
+        </PreferenceScreen>
     </PreferenceScreen>
 
     <PreferenceCategory
